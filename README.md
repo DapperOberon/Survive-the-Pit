@@ -1,2 +1,2 @@
-# The-Pit
-A first-person survival game.
+# The Pit
+A first-person survival game similar to *The Long Dark* and *Firewatch*.

@@ -19,7 +19,7 @@ public class SplashManager : MonoBehaviour {
 		if (isReady)
 		{
 			inputPromptAnim.SetBool("isReady", true);
-			if (Input.anyKeyDown)
+			if (Input.GetButtonDown("Submit"))
 			{
 				SceneManager.LoadScene(1); // TODO talk to the Scene Manager gameobject
 			}

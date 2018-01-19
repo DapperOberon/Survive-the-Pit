@@ -31,13 +31,14 @@ public class SplashManager : MonoBehaviour {
 
 	private void OnGUI()
 	{
-		if(InputManager.instance.GetInputState() == InputManager.eInputState.Controller)
+		switch (InputManager.instance.GetInputState())
 		{
-			mText.text = "Press A to start...";
-		}
-		else
-		{
-			mText.text = "Press Enter to start...";
+			case InputManager.eInputState.MouseKeyboard:
+				mText.text = "Press Enter to start...";
+				break;
+			case InputManager.eInputState.Controller:
+				mText.text = "Press A to start...";
+				break;
 		}
 	}
 }

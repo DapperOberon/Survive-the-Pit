@@ -7,6 +7,7 @@
 /Survive the Pit/Assets/*
 # User created assets
 !/Survive the Pit/Assets/GameAssets/
+!/Survive the Pit/Assets/Resources/
 
 # Visual Studio 2017 cache directory
 /Survive the Pit/.vs/

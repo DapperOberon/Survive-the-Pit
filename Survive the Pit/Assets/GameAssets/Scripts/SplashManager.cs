@@ -37,7 +37,7 @@ public class SplashManager : MonoBehaviour {
 		}
 		else
 		{
-			mText.text = "Press any key to start...";
+			mText.text = "Press Enter to start...";
 		}
 	}
 }

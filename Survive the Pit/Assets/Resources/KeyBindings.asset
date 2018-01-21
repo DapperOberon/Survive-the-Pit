@@ -26,5 +26,19 @@ MonoBehaviour:
     Invert: 0
     Sensitivity: 1
     val: 0
+  - Name: Back
+    UniqueName: 
+    Type: 0
+    Positive:
+      Primary: 27
+      Secondary: 331
+    Negative:
+      Primary: 0
+      Secondary: 0
+    targetController: 0
+    Axis: 0
+    Invert: 0
+    Sensitivity: 1
+    val: 0
   rebindRemoveKey: 27
   forceResetInEditor: 1

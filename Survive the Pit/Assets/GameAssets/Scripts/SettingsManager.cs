@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 using TMPro;
+using DFTGames.Localization;
 
 public class SettingsManager : MonoBehaviour {
 
+	public GameObject[] menus;
 	public AudioMixer mixer;
 
 	public TMP_Dropdown resDropdown;
@@ -62,5 +64,37 @@ public class SettingsManager : MonoBehaviour {
 	{
 		Resolution resolution = resolutions[resIndex];
 		Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+	}
+
+	public void SetEnglish()
+	{
+		EnableMenus();
+
+		LocalizeTM.SetCurrentLanguage(SystemLanguage.English);
+		LocalizeImage.SetCurrentLanguage();
+	}
+
+	public void SetGerman()
+	{
+		EnableMenus();
+
+		LocalizeTM.SetCurrentLanguage(SystemLanguage.German);
+		LocalizeImage.SetCurrentLanguage();
+	}
+
+	private void EnableMenus()
+	{
+		foreach(GameObject go in menus)
+		{
+			go.SetActive(true);
+		}
+	}
+
+	public void DisableMenus()
+	{
+		foreach(GameObject go in menus)
+		{
+			go.SetActive(false);
+		}
 	}
 }

@@ -33,7 +33,6 @@ public class SettingsManager : MonoBehaviour {
 
 		QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("Quality"));
 		qualityDropdown.value = PlayerPrefs.GetInt("Quality");
-		print(PlayerPrefs.GetInt("Quality"));
 	}
 
 	private void GetResolutions()

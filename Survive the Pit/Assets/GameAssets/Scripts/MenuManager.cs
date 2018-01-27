@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour {
+
+	public Button continueBtn;
+	private bool doesSaveExist = false;
 
 	public void SetSelectedButton(GameObject go)
 	{
@@ -27,5 +31,18 @@ public class MenuManager : MonoBehaviour {
 	{
 		Debug.Log("Quitting...");
 		Application.Quit();
+	}
+
+	private void OnGUI()
+	{
+		// TODO Add rich file checking functionality
+		if (doesSaveExist)
+		{
+			continueBtn.interactable = true;
+		}
+		else
+		{
+			continueBtn.interactable = false;
+		}
 	}
 }

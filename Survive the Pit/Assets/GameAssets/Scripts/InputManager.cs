@@ -6,6 +6,8 @@ public class InputManager : MonoBehaviour {
 
 	public static InputManager instance = null;
 
+	private bool isCursorVisible = false;
+
 	private void Awake()
 	{
 		// Create Singleton patter
@@ -47,6 +49,7 @@ public class InputManager : MonoBehaviour {
 				{
 					m_State = eInputState.Controller;
 					Debug.Log("InputManager - Controller being used");
+					HideCursor();
 				}
 				break;
 			case eInputState.Controller:
@@ -54,6 +57,7 @@ public class InputManager : MonoBehaviour {
 				{
 					m_State = eInputState.MouseKeyboard;
 					Debug.Log("InputManager - Mouse & Keyboard being used");
+					ShowCursor();
 				}
 				break;
 		}
@@ -71,6 +75,18 @@ public class InputManager : MonoBehaviour {
 	//****************************//
 	// Private member methods     //
 	//****************************//
+
+	private void ShowCursor()
+	{
+		Cursor.visible = true;
+		Cursor.lockState = CursorLockMode.None;
+	}
+
+	private void HideCursor()
+	{
+		Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Locked;
+	}
 
 	private bool isMouseKeyboard()
 	{

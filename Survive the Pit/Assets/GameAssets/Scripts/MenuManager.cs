@@ -3,11 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class MenuManager : MonoBehaviour {
 
+	public static MenuManager instance = null;
+
+	// Arrays
+	public GameObject[] menus;
+	public Slider[] sliders;
+
+	// Buttons
 	public Button continueBtn;
-	private bool doesSaveExist = false;
+	public Button newGameBtn;
+	public bool doesSaveExist = true; // TODO Add rich check and make private
+
+	// Graphics
+	public TMP_Dropdown resDropdown;
+	public TMP_Dropdown qualityDropdown;
+
+	private void Awake()
+	{
+		if(instance == null)
+		{
+			instance = this;
+		}
+		else if(instance != this)
+		{
+			Destroy(gameObject);
+		}
+	}
 
 	public void SetSelectedButton(GameObject go)
 	{
@@ -33,7 +58,7 @@ public class MenuManager : MonoBehaviour {
 		Application.Quit();
 	}
 
-	private void OnGUI()
+	private void Start()
 	{
 		// TODO Add rich file checking functionality
 		if (doesSaveExist)
@@ -43,6 +68,7 @@ public class MenuManager : MonoBehaviour {
 		else
 		{
 			continueBtn.interactable = false;
+			SetSelectedButton(newGameBtn.gameObject);
 		}
 	}
 }

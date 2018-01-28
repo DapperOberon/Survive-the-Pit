@@ -8,14 +8,9 @@ using DFTGames.Localization;
 
 public class SettingsManager : MonoBehaviour {
 
-	public GameObject[] menus;
-	public Slider[] sliders;
-	public AudioMixer mixer;
+	public AudioMixer mixer; // TODO Move to audio manager
 
-	public TMP_Dropdown resDropdown;
 	private Resolution[] resolutions;
-
-	public TMP_Dropdown qualityDropdown;
 
 	private void Start()
 	{
@@ -26,20 +21,20 @@ public class SettingsManager : MonoBehaviour {
 	private void LoadPrefs()
 	{
 		mixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVolume"));
-		sliders[0].value = PlayerPrefs.GetFloat("MasterVolume");
+		MenuManager.instance.sliders[0].value = PlayerPrefs.GetFloat("MasterVolume");
 
 		mixer.SetFloat("BGMVolume", PlayerPrefs.GetFloat("BGMVolume"));
-		sliders[1].value = PlayerPrefs.GetFloat("BGMVolume");
+		MenuManager.instance.sliders[1].value = PlayerPrefs.GetFloat("BGMVolume");
 
 		QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("Quality"));
-		qualityDropdown.value = PlayerPrefs.GetInt("Quality");
+		MenuManager.instance.qualityDropdown.value = PlayerPrefs.GetInt("Quality");
 	}
 
 	private void GetResolutions()
 	{
 		resolutions = Screen.resolutions;
 
-		resDropdown.ClearOptions();
+		MenuManager.instance.resDropdown.ClearOptions();
 
 		List<string> options = new List<string>();
 
@@ -56,9 +51,9 @@ public class SettingsManager : MonoBehaviour {
 			}
 		}
 
-		resDropdown.AddOptions(options);
-		resDropdown.value = currentResolutionIndex;
-		resDropdown.RefreshShownValue();
+		MenuManager.instance.resDropdown.AddOptions(options);
+		MenuManager.instance.resDropdown.value = currentResolutionIndex;
+		MenuManager.instance.resDropdown.RefreshShownValue();
 	}
 
 	public void SetMasterVolume(float volume)
@@ -109,7 +104,7 @@ public class SettingsManager : MonoBehaviour {
 
 	private void EnableMenus()
 	{
-		foreach(GameObject go in menus)
+		foreach(GameObject go in MenuManager.instance.menus)
 		{
 			go.SetActive(true);
 		}
@@ -117,7 +112,7 @@ public class SettingsManager : MonoBehaviour {
 
 	public void DisableMenus()
 	{
-		foreach(GameObject go in menus)
+		foreach(GameObject go in MenuManager.instance.menus)
 		{
 			go.SetActive(false);
 		}

@@ -5622,20 +5622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01bd4a1b08dc8d14497aa9d02800ae65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menus:
-  - {fileID: 1779352459}
-  - {fileID: 1349335093}
-  - {fileID: 1892302249}
-  - {fileID: 2046130687}
-  - {fileID: 1184086921}
-  - {fileID: 352900924}
-  - {fileID: 1924138710}
-  sliders:
-  - {fileID: 1213408562}
-  - {fileID: 2070163079}
   mixer: {fileID: 24100000, guid: 1c4bf01d0af80004ca5dd6745d521404, type: 2}
-  resDropdown: {fileID: 1899882485}
-  qualityDropdown: {fileID: 1876444105}
 --- !u!4 &994259824
 Transform:
   m_ObjectHideFlags: 0
@@ -8030,7 +8017,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb762a7f5979111408656b9ca2eb9e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menus:
+  - {fileID: 1779352459}
+  - {fileID: 1349335093}
+  - {fileID: 1892302249}
+  - {fileID: 2046130687}
+  - {fileID: 1184086921}
+  - {fileID: 352900924}
+  - {fileID: 1924138710}
+  sliders:
+  - {fileID: 1213408562}
+  - {fileID: 2070163079}
   continueBtn: {fileID: 1530779313}
+  newGameBtn: {fileID: 451674566}
+  doesSaveExist: 1
+  resDropdown: {fileID: 1899882485}
+  qualityDropdown: {fileID: 1876444105}
 --- !u!4 &1498139839
 Transform:
   m_ObjectHideFlags: 0

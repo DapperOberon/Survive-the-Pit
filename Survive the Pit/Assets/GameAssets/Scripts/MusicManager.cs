@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class MusicManager : MonoBehaviour {
 
 	public static MusicManager instance;
+
+	public AudioMixer mixer;
 
 	private void Awake()
 	{

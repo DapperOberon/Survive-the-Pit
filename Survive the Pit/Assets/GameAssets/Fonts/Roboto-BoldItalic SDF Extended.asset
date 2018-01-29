@@ -11,19 +11,19 @@ MonoBehaviour:
   m_Script: {fileID: -667331979, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
   m_Name: Roboto-BoldItalic SDF Extended
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 160756271
   material: {fileID: 21055983714329008}
-  materialHashCode: 0
+  materialHashCode: -2127922492
   fontAssetType: 1
   m_fontInfo:
     Name: Roboto
     PointSize: 83
-    Scale: 0
+    Scale: 1
     CharacterCount: 231
     LineHeight: 97.25
     Baseline: 0
     Ascender: 77
-    CapHeight: 0
+    CapHeight: 59
     Descender: -20.25
     CenterLine: 0
     SuperscriptOffset: 77
@@ -33,7 +33,7 @@ MonoBehaviour:
     UnderlineThickness: 4.0527344
     strikethrough: 20.636364
     strikethroughThickness: 4.0527344
-    TabWidth: 0
+    TabWidth: 204.375
     Padding: 9
     AtlasWidth: 1024
     AtlasHeight: 1024
@@ -42,10 +42,10 @@ MonoBehaviour:
   - id: 32
     x: 10
     y: 1033
-    width: 0
-    height: 0
+    width: 20.4375
+    height: 97.25
     xOffset: 0
-    yOffset: 0
+    yOffset: 77
     xAdvance: 20.4375
     scale: 1
   - id: 33
@@ -2231,9 +2231,9 @@ Material:
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.9
+    - _ScaleRatioB: 0.73125
+    - _ScaleRatioC: 0.73125
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0

@@ -8,7 +8,7 @@ using DFTGames.Localization;
 
 public class SettingsManager : MonoBehaviour {
 
-	public AudioMixer mixer; // TODO Move to audio manager
+	 // TODO Move to audio manager
 
 	private Resolution[] resolutions;
 
@@ -20,10 +20,10 @@ public class SettingsManager : MonoBehaviour {
 
 	private void LoadPrefs()
 	{
-		mixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVolume"));
+		MusicManager.instance.mixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVolume"));
 		MenuManager.instance.sliders[0].value = PlayerPrefs.GetFloat("MasterVolume");
 
-		mixer.SetFloat("BGMVolume", PlayerPrefs.GetFloat("BGMVolume"));
+		MusicManager.instance.mixer.SetFloat("BGMVolume", PlayerPrefs.GetFloat("BGMVolume"));
 		MenuManager.instance.sliders[1].value = PlayerPrefs.GetFloat("BGMVolume");
 
 		QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("Quality"));
@@ -58,13 +58,13 @@ public class SettingsManager : MonoBehaviour {
 
 	public void SetMasterVolume(float volume)
 	{
-		mixer.SetFloat("MasterVolume", volume);
+		MusicManager.instance.mixer.SetFloat("MasterVolume", volume);
 		PlayerPrefs.SetFloat("MasterVolume", volume);
 	}
 
 	public void SetBGMVolume(float volume)
 	{
-		mixer.SetFloat("BGMVolume", volume);
+		MusicManager.instance.mixer.SetFloat("BGMVolume", volume);
 		PlayerPrefs.SetFloat("BGMVolume", volume);
 	}
 

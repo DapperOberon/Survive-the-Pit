@@ -68,5 +68,61 @@ MonoBehaviour:
     Invert: 0
     Sensitivity: 1
     val: 0
+  - Name: RotateCameraX
+    UniqueName: 
+    Type: 1
+    Positive:
+      Primary: 0
+      Secondary: 0
+    Negative:
+      Primary: 0
+      Secondary: 0
+    targetController: 0
+    Axis: 0
+    Invert: 0
+    Sensitivity: 1
+    val: 0
+  - Name: RotateCameraX
+    UniqueName: 
+    Type: 2
+    Positive:
+      Primary: 0
+      Secondary: 0
+    Negative:
+      Primary: 0
+      Secondary: 0
+    targetController: 1
+    Axis: 3
+    Invert: 0
+    Sensitivity: 1
+    val: 0
+  - Name: RotateCameraY
+    UniqueName: 
+    Type: 1
+    Positive:
+      Primary: 0
+      Secondary: 0
+    Negative:
+      Primary: 0
+      Secondary: 0
+    targetController: 0
+    Axis: 1
+    Invert: 1
+    Sensitivity: 1
+    val: 0
+  - Name: RotateCameraY
+    UniqueName: 
+    Type: 2
+    Positive:
+      Primary: 0
+      Secondary: 0
+    Negative:
+      Primary: 0
+      Secondary: 0
+    targetController: 0
+    Axis: 4
+    Invert: 0
+    Sensitivity: 0.5
+    val: 0
   rebindRemoveKey: 27
   forceResetInEditor: 1

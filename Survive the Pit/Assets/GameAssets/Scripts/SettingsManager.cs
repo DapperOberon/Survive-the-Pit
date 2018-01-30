@@ -8,8 +8,6 @@ using DFTGames.Localization;
 
 public class SettingsManager : MonoBehaviour {
 
-	 // TODO Move to audio manager
-
 	private Resolution[] resolutions;
 
 	private void Start()

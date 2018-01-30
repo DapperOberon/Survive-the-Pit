@@ -40,5 +40,33 @@ MonoBehaviour:
     Invert: 0
     Sensitivity: 1
     val: 0
+  - Name: Move
+    UniqueName: 
+    Type: 0
+    Positive:
+      Primary: 119
+      Secondary: 0
+    Negative:
+      Primary: 115
+      Secondary: 0
+    targetController: 0
+    Axis: 0
+    Invert: 0
+    Sensitivity: 1
+    val: 0
+  - Name: Move
+    UniqueName: 
+    Type: 2
+    Positive:
+      Primary: 119
+      Secondary: 0
+    Negative:
+      Primary: 115
+      Secondary: 0
+    targetController: 1
+    Axis: 0
+    Invert: 0
+    Sensitivity: 1
+    val: 0
   rebindRemoveKey: 27
   forceResetInEditor: 1

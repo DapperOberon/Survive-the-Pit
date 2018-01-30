@@ -49,7 +49,7 @@ public class InputManager : MonoBehaviour {
 				{
 					m_State = eInputState.Controller;
 					Debug.Log("InputManager - Controller being used");
-					HideCursor();
+					//HideCursor();
 				}
 				break;
 			case eInputState.Controller:
@@ -57,7 +57,7 @@ public class InputManager : MonoBehaviour {
 				{
 					m_State = eInputState.MouseKeyboard;
 					Debug.Log("InputManager - Mouse & Keyboard being used");
-					ShowCursor();
+					//ShowCursor();
 				}
 				break;
 		}
@@ -76,13 +76,13 @@ public class InputManager : MonoBehaviour {
 	// Private member methods     //
 	//****************************//
 
-	private void ShowCursor()
+	public void ShowCursor()
 	{
 		Cursor.visible = true;
 		Cursor.lockState = CursorLockMode.None;
 	}
 
-	private void HideCursor()
+	public void HideCursor()
 	{
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;

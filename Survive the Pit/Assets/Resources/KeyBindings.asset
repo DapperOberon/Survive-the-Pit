@@ -44,10 +44,10 @@ MonoBehaviour:
     UniqueName: 
     Type: 0
     Positive:
-      Primary: 119
+      Primary: 115
       Secondary: 0
     Negative:
-      Primary: 115
+      Primary: 119
       Secondary: 0
     targetController: 0
     Axis: 0
@@ -55,6 +55,34 @@ MonoBehaviour:
     Sensitivity: 1
     val: 0
   - Name: Move
+    UniqueName: 
+    Type: 2
+    Positive:
+      Primary: 119
+      Secondary: 0
+    Negative:
+      Primary: 115
+      Secondary: 0
+    targetController: 1
+    Axis: 1
+    Invert: 1
+    Sensitivity: 1
+    val: 0
+  - Name: Strafe
+    UniqueName: 
+    Type: 0
+    Positive:
+      Primary: 100
+      Secondary: 0
+    Negative:
+      Primary: 97
+      Secondary: 0
+    targetController: 0
+    Axis: 0
+    Invert: 0
+    Sensitivity: 1
+    val: 0
+  - Name: Strafe
     UniqueName: 
     Type: 2
     Positive:

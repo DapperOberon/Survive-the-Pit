@@ -2,40 +2,53 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour {
 
 	Vector2 mouselook;
 	Vector2 smoothV;
 
+	[Header("Mouse Settings")]
 	public float mouseSensitivity = 5f;
-	public float controllerSensitivity = 2.5f;
-	public float smoothing = 1f;
 	public bool invertMouse = false;
+
+	[Header("Controller Settings")]
+	public float controllerSensitivity = 2.5f;
 	public bool invertController = false;
 
+	[Header("General Camera Settings")]
+	public float smoothing = 1f;
 	public float viewClampUp = -90f;
 	public float viewClampDown = 80f;
 
+	[Header("Player Movement")]
+	public float moveSpeed = 1f;
+	public float strafeSpeed = 1f;
+	public float jumpSpeed = 1f;
+	public float gravity = 9.8f;
+	private Vector3 moveDir = Vector3.zero;
+
 	private GameObject player;
+	private CharacterController playerCC;
 	private GameObject mainCam;
 
 	private void Start()
 	{
 		player = this.gameObject;
+		playerCC = gameObject.GetComponent<CharacterController>();
 		mainCam = Camera.main.gameObject;
+
+		InputManager.instance.HideCursor();
 	}
 
-	private void Update()
+	private void FixedUpdate()
 	{
 		RotateCamera();
+		MovePlayer();
 	}
 
 	private void RotateCamera()
 	{
-		// TODO Split into controller and keyboard sections based on input
-		
-
 		if(InputManager.instance.GetInputState() == InputManager.eInputState.MouseKeyboard)
 		{
 			CreateMouselookV(mouseSensitivity);
@@ -62,7 +75,7 @@ public class PlayerController : MonoBehaviour {
 				mainCam.transform.localRotation = Quaternion.AngleAxis(mouselook.y, Vector3.right);
 			}
 		}
-		
+			
 		player.transform.localRotation = Quaternion.AngleAxis(mouselook.x, player.transform.up);
 	}
 
@@ -75,5 +88,26 @@ public class PlayerController : MonoBehaviour {
 		smoothV.y = Mathf.Lerp(smoothV.y, md.y, 1f / smoothing);
 		mouselook += smoothV;
 		mouselook.y = Mathf.Clamp(mouselook.y, viewClampUp, viewClampDown);
+	}
+
+	private void MovePlayer()
+	{
+		if (playerCC.isGrounded)
+		{
+			float translation = hInput.GetAxis("Move") * moveSpeed;
+			float strafe = hInput.GetAxis("Strafe") * strafeSpeed;
+			moveDir = new Vector3(strafe, 0, translation);
+			moveDir = transform.TransformDirection(moveDir);
+			moveDir *= moveSpeed;
+			// TODO add jumping
+		}
+		moveDir.y -= gravity * Time.deltaTime;
+		playerCC.Move(moveDir * Time.deltaTime);
+		//float translation = hInput.GetAxis("Move") * moveSpeed;
+		//float strafe = hInput.GetAxis("Strafe") * strafeSpeed;
+
+		//Vector3 movement = new Vector3(, 0, strafe);
+
+		////transform.Translate(strafe, 0, translation);
 	}
 }

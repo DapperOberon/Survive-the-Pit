@@ -8188,6 +8188,7 @@ MonoBehaviour:
   doesSaveExist: 1
   resDropdown: {fileID: 1899882485}
   qualityDropdown: {fileID: 1876444105}
+  gameIndex: 2
 --- !u!4 &1498139839
 Transform:
   m_ObjectHideFlags: 0

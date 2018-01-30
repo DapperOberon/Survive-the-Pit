@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class MenuManager : MonoBehaviour {
@@ -21,6 +22,9 @@ public class MenuManager : MonoBehaviour {
 	// Graphics
 	public TMP_Dropdown resDropdown;
 	public TMP_Dropdown qualityDropdown;
+
+	// TODO move to SceneManager
+	public int gameIndex = 2;
 
 	private void Awake()
 	{
@@ -44,6 +48,7 @@ public class MenuManager : MonoBehaviour {
 	{
 		// TODO Add rich loading functionality
 		Debug.Log("Loading game...");
+		SceneManager.LoadSceneAsync(2); // TODO Move to SceneManager
 	}
 
 	public void NewGame()

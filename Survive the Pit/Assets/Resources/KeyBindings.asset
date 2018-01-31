@@ -166,5 +166,33 @@ MonoBehaviour:
     Invert: 0
     Sensitivity: 1000
     val: 0
+  - Name: Sprint
+    UniqueName: 
+    Type: 0
+    Positive:
+      Primary: 304
+      Secondary: 338
+    Negative:
+      Primary: 0
+      Secondary: 0
+    targetController: 0
+    Axis: 0
+    Invert: 0
+    Sensitivity: 1000
+    val: 0
+  - Name: Crouch
+    UniqueName: 
+    Type: 0
+    Positive:
+      Primary: 99
+      Secondary: 339
+    Negative:
+      Primary: 0
+      Secondary: 0
+    targetController: 0
+    Axis: 0
+    Invert: 0
+    Sensitivity: 1000
+    val: 0
   rebindRemoveKey: 27
   forceResetInEditor: 1

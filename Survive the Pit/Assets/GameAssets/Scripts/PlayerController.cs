@@ -22,12 +22,13 @@ public class PlayerController : MonoBehaviour {
 	public float viewClampDown = 80f;
 
 	[Header("Player Movement")]
-	public float moveSpeed = 1f;
+	public float moveSpeed = 2f;
 	public float strafeSpeed = 1f;
 	public float jumpSpeed = 1f;
 	public float gravity = 9.8f;
-	private Vector3 moveDir = Vector3.zero;
 
+	private Vector3 moveDir = Vector3.zero;
+	
 	private GameObject player;
 	private CharacterController playerCC;
 	private GameObject mainCam;
@@ -41,7 +42,7 @@ public class PlayerController : MonoBehaviour {
 		InputManager.instance.HideCursor();
 	}
 
-	private void FixedUpdate()
+	private void Update()
 	{
 		RotateCamera();
 		MovePlayer();
@@ -90,6 +91,7 @@ public class PlayerController : MonoBehaviour {
 		mouselook.y = Mathf.Clamp(mouselook.y, viewClampUp, viewClampDown);
 	}
 
+	// TODO Add sprinting
 	private void MovePlayer()
 	{
 		if (playerCC.isGrounded)
@@ -98,16 +100,12 @@ public class PlayerController : MonoBehaviour {
 			float strafe = hInput.GetAxis("Strafe") * strafeSpeed;
 			moveDir = new Vector3(strafe, 0, translation);
 			moveDir = transform.TransformDirection(moveDir);
-			moveDir *= moveSpeed;
-			// TODO add jumping
+			if (hInput.GetButtonDown("Jump"))
+			{
+				moveDir.y = jumpSpeed;
+			}
 		}
 		moveDir.y -= gravity * Time.deltaTime;
 		playerCC.Move(moveDir * Time.deltaTime);
-		//float translation = hInput.GetAxis("Move") * moveSpeed;
-		//float strafe = hInput.GetAxis("Strafe") * strafeSpeed;
-
-		//Vector3 movement = new Vector3(, 0, strafe);
-
-		////transform.Translate(strafe, 0, translation);
 	}
 }

@@ -52,7 +52,7 @@ MonoBehaviour:
     targetController: 0
     Axis: 0
     Invert: 0
-    Sensitivity: 1
+    Sensitivity: 1000
     val: 0
   - Name: Move
     UniqueName: 
@@ -80,7 +80,7 @@ MonoBehaviour:
     targetController: 0
     Axis: 0
     Invert: 0
-    Sensitivity: 1
+    Sensitivity: 10
     val: 0
   - Name: Strafe
     UniqueName: 
@@ -150,7 +150,21 @@ MonoBehaviour:
     targetController: 0
     Axis: 4
     Invert: 0
-    Sensitivity: 0.5
+    Sensitivity: 1
+    val: 0
+  - Name: Jump
+    UniqueName: 
+    Type: 0
+    Positive:
+      Primary: 32
+      Secondary: 330
+    Negative:
+      Primary: 0
+      Secondary: 0
+    targetController: 0
+    Axis: 0
+    Invert: 0
+    Sensitivity: 1000
     val: 0
   rebindRemoveKey: 27
   forceResetInEditor: 1

@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour {
 	private CharacterController playerCC;
 	private GameObject mainCam;
 
-	private void Start()
+	private void Awake()
 	{
 		player = this.gameObject;
 		playerCC = gameObject.GetComponent<CharacterController>();
@@ -167,7 +167,6 @@ public class PlayerController : MonoBehaviour {
 				if (!Physics.Raycast(ray, out hit, 1))
 				{
 					playerCC.height = 1.8f;
-					Debug.Log("Nothing above, standing up...");
 				}
 				else
 				{

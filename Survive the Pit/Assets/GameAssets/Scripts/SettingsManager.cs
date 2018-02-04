@@ -10,7 +10,7 @@ public class SettingsManager : MonoBehaviour {
 
 	private Resolution[] resolutions;
 
-	private void Start()
+	private void Awake()
 	{
 		GetResolutions();
 		LoadPrefs();

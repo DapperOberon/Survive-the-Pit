@@ -20,25 +20,33 @@ public class TimeOfDay : MonoBehaviour {
 
 	private void UpdateSun()
 	{
-		sun.transform.localRotation = Quaternion.Euler((TimeManager.instance.totalSeconds / (TimeManager.instance.dayLengthInSeconds / 360)) - 90, 0, 0);
-
+		float time = TimeManager.instance.totalSeconds;
+		float dayLengh = TimeManager.instance.dayLengthInSeconds;
 		float intensityMultiplier = 1;
+		float time0To1 = Mathf.InverseLerp(0, dayLengh, time);
 
-		// TODO Rework sun logic for use with TimeManager
-		//// Sun intensity logic
-		//if (TimeManager.instance.totalSeconds <= 0.23f || TimeManager.instance.totalSeconds >= 0.75f)
-		//{
-		//	intensityMultiplier = 0;
-		//}
-		//else if (TimeManager.instance.totalSeconds <= 0.25f)
-		//{
-		//	intensityMultiplier = Mathf.Clamp01((TimeManager.instance.totalSeconds - 0.23f) * (1 / 0.02f));
-		//}
-		//else if (TimeManager.instance.totalSeconds >= 0.73f)
-		//{
-		//	intensityMultiplier = Mathf.Clamp01(1 - ((TimeManager.instance.totalSeconds - 0.73f) * (1 / 0.02f)));
-		//}
+		sun.transform.localRotation = Quaternion.Euler((time / (dayLengh / 360)) - 90, 0, 0);
+
+		// TODO Change time0to1 to work with standard seconds
+		// TODO Fix ambient lighting issue
+		// Sun intensity logic
+		if (time0To1 <= 0.23f || time0To1 >= 0.75f)
+		{
+			intensityMultiplier = 0;
+			//DynamicGI.UpdateEnvironment();
+		}
+		else if (time0To1 <= 0.25f)
+		{
+			intensityMultiplier = Mathf.Clamp01((time0To1 - 0.23f) * (1 / 0.02f));
+			//DynamicGI.UpdateEnvironment();
+		}
+		else if (time0To1 >= 0.73f)
+		{
+			intensityMultiplier = Mathf.Clamp01(1 - ((time0To1 - 0.73f) * (1 / 0.02f)));
+			//DynamicGI.UpdateEnvironment();
+		}
 
 		sun.intensity = sunInitialIntensity * intensityMultiplier;
+		//RenderSettings.ambientIntensity = intensityMultiplier;
 	}
 }

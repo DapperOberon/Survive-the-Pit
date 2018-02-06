@@ -6,7 +6,7 @@ using System;
 public class TimeManager : MonoBehaviour {
 
 	public static TimeManager instance = null;
-	public static int TIMESCALE = 1; // Use this to modify the day speed
+	public static int TIMESCALE = 1000; // Use this to modify the day speed
 	
 	// TIME //
 	public float totalSeconds;
@@ -49,7 +49,7 @@ public class TimeManager : MonoBehaviour {
 			Destroy(gameObject);
 		}
 
-		totalSeconds = (int)getCurrentDateTime().TimeOfDay.TotalSeconds; // TODO Make rich loading time
+		//totalSeconds = (int)getCurrentDateTime().TimeOfDay.TotalSeconds; // TODO Make rich loading time
 		day = getCurrentDateTime().Day;
 		month = getCurrentDateTime().Month;
 		year = getCurrentDateTime().Year;

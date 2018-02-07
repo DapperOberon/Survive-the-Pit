@@ -11672,13 +11672,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1e818b0300221040b19c0c940b5f769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 21590
+  time: 50000
   dayLength: 86400
   sun: {fileID: 1679488312}
   dawnStartTime: 6
   dayStartTime: 8
-  duskStartTime: 18
-  nightStartTime: 20
+  duskStartTime: 16
+  nightStartTime: 18
   sunDimTime: 0.00025
   dawnSunIntensity: 0.5
   daySunIntensity: 1

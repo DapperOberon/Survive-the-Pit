@@ -6,7 +6,7 @@ using System;
 public class TimeManager : MonoBehaviour {
 
 	public static TimeManager instance = null;
-	public static int TIMESCALE = 1; // Use this to modify the day speed
+	public static int TIMESCALE = 1000; // Use this to modify the day speed
 
 	// TIME //
 	[Tooltip("Time of day in seconds")]
@@ -20,10 +20,10 @@ public class TimeManager : MonoBehaviour {
 	private float sunInitialIntensity;
 
 	[Header("Phase Start Times")]
-	public int dawnStartTime = 6;
-	public int dayStartTime = 8;
-	public int duskStartTime = 18;
-	public int nightStartTime = 20;
+	public int dawnStartTime;
+	public int dayStartTime;
+	public int duskStartTime;
+	public int nightStartTime;
 
 	public float sunDimTime; // Sun dim speed
 	public float dawnSunIntensity = 0.5f;
@@ -67,9 +67,13 @@ public class TimeManager : MonoBehaviour {
 	{
 		Debug.Log("Dawn");
 
-		if(sun.intensity < dawnSunIntensity) // If sun is not dawSunIntensity, then go up to it
+		if(sun.intensity < dawnSunIntensity) // If sun is not dawnSunIntensity, then go up to it
 		{
 			sun.intensity += Time.deltaTime * (sunDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
+		}
+		else if (sun.intensity > dawnSunIntensity)
+		{
+			sun.intensity = dawnSunIntensity;
 		}
 
 		// Change to Day phase
@@ -83,6 +87,15 @@ public class TimeManager : MonoBehaviour {
 	{
 		Debug.Log("Day");
 
+		if (sun.intensity < daySunIntensity) // If sun is not daySunIntensity, then go up to it
+		{
+			sun.intensity += Time.deltaTime * (sunDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
+		}
+		else if (sun.intensity > daySunIntensity)
+		{
+			sun.intensity = daySunIntensity;
+		}
+
 		// Change to Dusk phase
 		if (getHour() >= duskStartTime && getHour() < nightStartTime)
 		{
@@ -94,6 +107,15 @@ public class TimeManager : MonoBehaviour {
 	{
 		Debug.Log("Dusk");
 
+		if (sun.intensity > duskSunIntensity) // If sun is not duskSunIntensity, then go up to it
+		{
+			sun.intensity -= Time.deltaTime * (sunDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
+		}
+		else if (sun.intensity < duskSunIntensity)
+		{
+			sun.intensity = duskSunIntensity;
+		}
+
 		// Change to Night phase
 		if (getHour() >= nightStartTime)
 		{
@@ -104,6 +126,15 @@ public class TimeManager : MonoBehaviour {
 	private void Night()
 	{
 		Debug.Log("Night");
+
+		if (sun.intensity > nightSunIntensity) // If sun is not nightSunIntensity, then go up to it
+		{
+			sun.intensity -= Time.deltaTime * (sunDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
+		}
+		else if (sun.intensity < nightSunIntensity)
+		{
+			sun.intensity = nightSunIntensity;
+		}
 
 		// Change to Dawn phase
 		if (getHour() >= dawnStartTime && getHour() < dayStartTime)
@@ -157,8 +188,30 @@ public class TimeManager : MonoBehaviour {
 
 		// 
 		//sunInitialIntensity = sun.intensity;
-		sun.intensity = nightSunIntensity;
-		dayPhases = DayPhases.Night;
+		if(getHour() >= dawnStartTime && getHour() < dayStartTime)
+		{
+			// Set to dawn
+			dayPhases = DayPhases.Dawn;
+			sun.intensity = dawnSunIntensity;
+		}
+		else if(getHour() >= dayStartTime && getHour() < duskStartTime)
+		{
+			// Set to day
+			dayPhases = DayPhases.Day;
+			sun.intensity = daySunIntensity;
+		}
+		else if(getHour() >= duskStartTime && getHour() < nightStartTime)
+		{
+			// Set to dusk
+			dayPhases = DayPhases.Dusk;
+			sun.intensity = duskSunIntensity;
+		}
+		else if(getHour() >= nightStartTime)
+		{
+			// Set to night
+			dayPhases = DayPhases.Night;
+			sun.intensity = nightSunIntensity;
+		}
 	}
 
 	private void Start()

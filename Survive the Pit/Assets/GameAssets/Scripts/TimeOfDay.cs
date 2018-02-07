@@ -20,8 +20,8 @@ public class TimeOfDay : MonoBehaviour {
 
 	private void UpdateSun()
 	{
-		float time = TimeManager.instance.totalSeconds;
-		float dayLengh = TimeManager.instance.dayLengthInSeconds;
+		float time = TimeManager.instance.time;
+		float dayLengh = TimeManager.instance.dayLength;
 		float intensityMultiplier = 1;
 		float time0To1 = Mathf.InverseLerp(0, dayLengh, time);
 

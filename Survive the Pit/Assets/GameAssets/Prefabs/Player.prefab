@@ -104,7 +104,7 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 0
+  m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
@@ -155,6 +155,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4512861b4ad49cd4f8da8da352a3ade1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
+  maxHunger: 100
+  maxThirst: 100
+  maxStamina: 100
+  maxTemp: 100
+  minTemp: 96
+  healthRate: 1000
+  hungerRate: 21000
+  thirstRate: 7000
+  staminaRate: 8
+  calorieRate: 2
 --- !u!114 &114622488291133508
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -6,11 +6,111 @@ using System;
 public class TimeManager : MonoBehaviour {
 
 	public static TimeManager instance = null;
-	public static int TIMESCALE = 1000; // Use this to modify the day speed
-	
+	public static int TIMESCALE = 1; // Use this to modify the day speed
+
 	// TIME //
-	public float totalSeconds;
-	public float dayLengthInSeconds = 86400;
+	[Tooltip("Time of day in seconds")]
+	public float time;
+	[Tooltip("Day length in seconds")]
+	public float dayLength = 86400;
+
+	// TimeOfDay
+	[SerializeField] private Light sun;
+
+	private float sunInitialIntensity;
+
+	[Header("Phase Start Times")]
+	public int dawnStartTime = 6;
+	public int dayStartTime = 8;
+	public int duskStartTime = 18;
+	public int nightStartTime = 20;
+
+	public float sunDimTime; // Sun dim speed
+	public float dawnSunIntensity = 0.5f;
+	public float daySunIntensity = 0.1f;
+	public float duskSunIntensity = 0.25f;
+	public float nightSunIntensity = 0f;
+
+	public DayPhases dayPhases;
+	public enum DayPhases
+	{
+		Dawn,
+		Day,
+		Dusk,
+		Night
+	}
+
+	IEnumerator TimeOfDay()
+	{
+		while (true)
+		{
+			switch (dayPhases)
+			{
+				case DayPhases.Dawn:
+					Dawn();
+					break;
+				case DayPhases.Day:
+					Day();
+					break;
+				case DayPhases.Dusk:
+					Dusk();
+					break;
+				case DayPhases.Night:
+					Night();
+					break;
+			}
+			yield return null;
+		}
+	}
+
+	private void Dawn()
+	{
+		Debug.Log("Dawn");
+
+		if(sun.intensity < dawnSunIntensity) // If sun is not dawSunIntensity, then go up to it
+		{
+			sun.intensity += Time.deltaTime * (sunDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
+		}
+
+		// Change to Day phase
+		if (getHour() >= dayStartTime && getHour() < duskStartTime)
+		{
+			dayPhases = DayPhases.Day;
+		}
+	}
+
+	private void Day()
+	{
+		Debug.Log("Day");
+
+		// Change to Dusk phase
+		if (getHour() >= duskStartTime && getHour() < nightStartTime)
+		{
+			dayPhases = DayPhases.Dusk;
+		}
+	}
+
+	private void Dusk()
+	{
+		Debug.Log("Dusk");
+
+		// Change to Night phase
+		if (getHour() >= nightStartTime)
+		{
+			dayPhases = DayPhases.Night;
+		}
+	}
+
+	private void Night()
+	{
+		Debug.Log("Night");
+
+		// Change to Dawn phase
+		if (getHour() >= dawnStartTime && getHour() < dayStartTime)
+		{
+			dayPhases = DayPhases.Dawn;
+		}
+	}
 
 	// DATE //
 	public Dictionary<int, string> monthDict = new Dictionary<int, string>
@@ -49,25 +149,37 @@ public class TimeManager : MonoBehaviour {
 			Destroy(gameObject);
 		}
 
-		//totalSeconds = (int)getCurrentDateTime().TimeOfDay.TotalSeconds; // TODO Make rich loading time
+		//time = (int)getCurrentDateTime().TimeOfDay.TotalSeconds; // TODO Make rich loading time
 		day = getCurrentDateTime().Day;
 		month = getCurrentDateTime().Month;
 		year = getCurrentDateTime().Year;
 		CalculateSeason();
+
+		// 
+		//sunInitialIntensity = sun.intensity;
+		sun.intensity = nightSunIntensity;
+		dayPhases = DayPhases.Night;
 	}
 
+	private void Start()
+	{
+		StartCoroutine(TimeOfDay());
+		// Set day phase based on time
+	}
 	private void Update () {
 		CalculateDateTime();
+		UpdateSun();
+
 	}
 
 	private void CalculateDateTime()
 	{
-		totalSeconds += Time.deltaTime * TIMESCALE;
+		time += Time.deltaTime * TIMESCALE;
 
-		if(totalSeconds >= dayLengthInSeconds)
+		if(time >= dayLength)
 		{
 			day++;
-			totalSeconds = 0;
+			time = 0;
 		}
 		else if(day >= 28)
 		{
@@ -85,17 +197,17 @@ public class TimeManager : MonoBehaviour {
 	#region
 	private int getHour()
 	{
-		return (int)totalSeconds / 60 / 60;
+		return (int)time / 60 / 60;
 	}
 
 	private int getMinute()
 	{
-		return (int)totalSeconds / 60 % 60;
+		return (int)time / 60 % 60;
 	}
 
 	private int getSecond()
 	{
-		return (int)totalSeconds % 60;
+		return (int)time % 60;
 	}
 	#endregion
 
@@ -228,5 +340,37 @@ public class TimeManager : MonoBehaviour {
 	public string toString()
 	{
 		return string.Format("{0:D}:{1:D2}:{2:D2} {3}\n{4} {5:D}, {6:D4}", ((getHour() == 0 || getHour() == 12) ? 12 : getHour() % 12), getMinute(), getSecond(), (getHour() < 12 ? "AM" : "PM"), getMonth(), getDay(), getYear());
+	}
+
+	private void UpdateSun()
+	{
+		sun.transform.localRotation = Quaternion.Euler((time / (dayLength / 360)) - 90, 0, 0);
+
+		//float intensityMultiplier = 1;
+		//float time0To1 = Mathf.InverseLerp(0, dayLength, time);
+
+		
+
+		//// TODO Change time0to1 to work with standard seconds
+		//// TODO Fix ambient lighting issue
+		//// Sun intensity logic
+		//if (time0To1 <= 0.23f || time0To1 >= 0.75f)
+		//{
+		//	intensityMultiplier = 0;
+		//	//DynamicGI.UpdateEnvironment();
+		//}
+		//else if (time0To1 <= 0.25f)
+		//{
+		//	intensityMultiplier = Mathf.Clamp01((time0To1 - 0.23f) * (1 / 0.02f));
+		//	//DynamicGI.UpdateEnvironment();
+		//}
+		//else if (time0To1 >= 0.73f)
+		//{
+		//	intensityMultiplier = Mathf.Clamp01(1 - ((time0To1 - 0.73f) * (1 / 0.02f)));
+		//	//DynamicGI.UpdateEnvironment();
+		//}
+
+		//sun.intensity = sunInitialIntensity * intensityMultiplier;
+		////RenderSettings.ambientIntensity = intensityMultiplier;
 	}
 }

@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour {
 	public float jumpSpeed = 1f;
 	public float gravity = 9.8f;
 	public bool toggleSprint = false;
-	private bool isSprinting = false;
+	private static bool isSprinting = false;
 	public bool toggleCrouch = false;
 	private bool isCrouching = false;
 
@@ -121,26 +121,39 @@ public class PlayerController : MonoBehaviour {
 
 	private void Sprint()
 	{
-		if (toggleSprint)
+		if(Player.GetStamina() > 0)
 		{
-			if (hInput.GetButtonDown("Sprint"))
+			if (toggleSprint)
 			{
-				isSprinting = !isSprinting;
+				if (hInput.GetButtonDown("Sprint"))
+				{
+					isSprinting = !isSprinting;
 
+				}
+
+				if (isSprinting)
+				{
+					moveDir.z *= sprintRate;
+				}
 			}
-
-			if (isSprinting)
+			else
 			{
-				moveDir.z *= sprintRate;
+				if (hInput.GetButton("Sprint"))
+				{
+					moveDir.z *= sprintRate;
+					isSprinting = true;
+				}
+				else
+				{
+					isSprinting = false;
+				}
 			}
 		}
-		else
-		{
-			if (hInput.GetButton("Sprint"))
-			{
-				moveDir.z *= sprintRate;
-			}
-		}
+	}
+
+	public static bool IsSprinting()
+	{
+		return isSprinting;
 	}
 
 	private void Crouch()

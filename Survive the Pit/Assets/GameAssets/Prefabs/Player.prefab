@@ -163,7 +163,7 @@ MonoBehaviour:
   minTemp: 96
   healthRate: 1000
   hungerRate: 21000
-  thirstRate: 7000
+  thirstRate: 3000
   staminaRate: 8
   calorieRate: 2
 --- !u!114 &114622488291133508

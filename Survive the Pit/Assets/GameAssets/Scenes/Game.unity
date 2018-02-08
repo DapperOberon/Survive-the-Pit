@@ -471,21 +471,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 20226613686651738, guid: 26881cb694c02cb4e88f6fef71f8d964,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 20226613686651738, guid: 26881cb694c02cb4e88f6fef71f8d964,
-        type: 2}
-      propertyPath: m_CullingMask.m_Bits
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 20226613686651738, guid: 26881cb694c02cb4e88f6fef71f8d964,
-        type: 2}
-      propertyPath: m_ClearFlags
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 26881cb694c02cb4e88f6fef71f8d964, type: 2}
   m_IsPrefabParent: 0
@@ -1636,8 +1621,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 272096316}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.83, z: 0}
+  m_LocalRotation: {x: 0.0111592915, y: -0.6997639, z: 0.01090362, w: 0.7142039}
+  m_LocalPosition: {x: 43.969414, y: -0.6472113, z: -0.89811087}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -11674,6 +11659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   time: 50000
   dayLength: 86400
+  dayPhases: 3
   sun: {fileID: 1679488312}
   dawnStartTime: 6
   dayStartTime: 8
@@ -11684,7 +11670,11 @@ MonoBehaviour:
   daySunIntensity: 1
   duskSunIntensity: 0.25
   nightSunIntensity: 0
-  dayPhases: 3
+  ambientDimTime: 0.0001
+  dawnAmbientIntensity: 0.5
+  dayAmbientIntensity: 1
+  duskAmbientIntensity: 0.25
+  nightAmbientIntensity: 0
 --- !u!1 &2004786671
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ using System;
 public class TimeManager : MonoBehaviour {
 
 	public static TimeManager instance = null;
-	public static int TIMESCALE = 1000; // Use this to modify the day speed
+	public static int TIMESCALE = 10000; // Use this to modify the day speed
 
 	// TIME //
 	[Tooltip("Time of day in seconds")]
@@ -15,6 +15,15 @@ public class TimeManager : MonoBehaviour {
 	public float dayLength = 86400;
 
 	// TimeOfDay
+	public DayPhases dayPhases;
+	public enum DayPhases
+	{
+		Dawn,
+		Day,
+		Dusk,
+		Night
+	}
+
 	[SerializeField] private Light sun;
 
 	private float sunInitialIntensity;
@@ -25,20 +34,21 @@ public class TimeManager : MonoBehaviour {
 	public int duskStartTime;
 	public int nightStartTime;
 
+	[Header("Sun Settings")]
 	public float sunDimTime; // Sun dim speed
 	public float dawnSunIntensity = 0.5f;
-	public float daySunIntensity = 0.1f;
+	public float daySunIntensity = 1f;
 	public float duskSunIntensity = 0.25f;
 	public float nightSunIntensity = 0f;
 
-	public DayPhases dayPhases;
-	public enum DayPhases
-	{
-		Dawn,
-		Day,
-		Dusk,
-		Night
-	}
+	[Header("Ambient Settings")]
+	public float ambientDimTime;
+	public float dawnAmbientIntensity = 0.5f;
+	public float dayAmbientIntensity = 1f;
+	public float duskAmbientIntensity = 0.25f;
+	public float nightAmbientIntensity = 0f;
+
+	
 
 	IEnumerator TimeOfDay()
 	{
@@ -67,7 +77,9 @@ public class TimeManager : MonoBehaviour {
 	{
 		Debug.Log("Dawn");
 
-		if(sun.intensity < dawnSunIntensity) // If sun is not dawnSunIntensity, then go up to it
+		// Sun settings
+		#region
+		if (sun.intensity < dawnSunIntensity) // If sun is not dawnSunIntensity, then go up to it
 		{
 			sun.intensity += Time.deltaTime * (sunDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
 		}
@@ -75,6 +87,19 @@ public class TimeManager : MonoBehaviour {
 		{
 			sun.intensity = dawnSunIntensity;
 		}
+		#endregion
+
+		// Ambient settings
+		#region
+		if (RenderSettings.ambientIntensity < dawnAmbientIntensity) // If sun is not dawnSunIntensity, then go up to it
+		{
+			RenderSettings.ambientIntensity += Time.deltaTime * (ambientDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
+		}
+		else if (RenderSettings.ambientIntensity > dawnAmbientIntensity)
+		{
+			RenderSettings.ambientIntensity = dawnAmbientIntensity;
+		}
+		#endregion
 
 		// Change to Day phase
 		if (getHour() >= dayStartTime && getHour() < duskStartTime)
@@ -87,6 +112,8 @@ public class TimeManager : MonoBehaviour {
 	{
 		Debug.Log("Day");
 
+		// Sun settings
+		#region
 		if (sun.intensity < daySunIntensity) // If sun is not daySunIntensity, then go up to it
 		{
 			sun.intensity += Time.deltaTime * (sunDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
@@ -95,6 +122,19 @@ public class TimeManager : MonoBehaviour {
 		{
 			sun.intensity = daySunIntensity;
 		}
+		#endregion
+
+		// Ambient settings
+		#region
+		if (RenderSettings.ambientIntensity < dayAmbientIntensity) // If sun is not dawnSunIntensity, then go up to it
+		{
+			RenderSettings.ambientIntensity += Time.deltaTime * (ambientDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
+		}
+		else if (RenderSettings.ambientIntensity > dayAmbientIntensity)
+		{
+			RenderSettings.ambientIntensity = dayAmbientIntensity;
+		}
+		#endregion
 
 		// Change to Dusk phase
 		if (getHour() >= duskStartTime && getHour() < nightStartTime)
@@ -107,6 +147,8 @@ public class TimeManager : MonoBehaviour {
 	{
 		Debug.Log("Dusk");
 
+		// Sun settings
+		#region
 		if (sun.intensity > duskSunIntensity) // If sun is not duskSunIntensity, then go up to it
 		{
 			sun.intensity -= Time.deltaTime * (sunDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
@@ -115,6 +157,19 @@ public class TimeManager : MonoBehaviour {
 		{
 			sun.intensity = duskSunIntensity;
 		}
+		#endregion
+
+		// Ambient settings
+		#region
+		if (RenderSettings.ambientIntensity < duskAmbientIntensity) // If sun is not dawnSunIntensity, then go up to it
+		{
+			RenderSettings.ambientIntensity += Time.deltaTime * (ambientDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
+		}
+		else if (RenderSettings.ambientIntensity > duskAmbientIntensity)
+		{
+			RenderSettings.ambientIntensity = duskAmbientIntensity;
+		}
+		#endregion
 
 		// Change to Night phase
 		if (getHour() >= nightStartTime)
@@ -127,6 +182,8 @@ public class TimeManager : MonoBehaviour {
 	{
 		Debug.Log("Night");
 
+		// Sun settings
+		#region
 		if (sun.intensity > nightSunIntensity) // If sun is not nightSunIntensity, then go up to it
 		{
 			sun.intensity -= Time.deltaTime * (sunDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
@@ -135,6 +192,19 @@ public class TimeManager : MonoBehaviour {
 		{
 			sun.intensity = nightSunIntensity;
 		}
+		#endregion
+
+		// Ambient settings
+		#region
+		if (RenderSettings.ambientIntensity < nightAmbientIntensity) // If sun is not dawnSunIntensity, then go up to it
+		{
+			RenderSettings.ambientIntensity += Time.deltaTime * (ambientDimTime * TIMESCALE); // Increase sun intensity by sunDimTime
+		}
+		else if (RenderSettings.ambientIntensity > nightAmbientIntensity)
+		{
+			RenderSettings.ambientIntensity = nightAmbientIntensity;
+		}
+		#endregion
 
 		// Change to Dawn phase
 		if (getHour() >= dawnStartTime && getHour() < dayStartTime)
@@ -193,24 +263,28 @@ public class TimeManager : MonoBehaviour {
 			// Set to dawn
 			dayPhases = DayPhases.Dawn;
 			sun.intensity = dawnSunIntensity;
+			RenderSettings.ambientIntensity = dawnAmbientIntensity;
 		}
 		else if(getHour() >= dayStartTime && getHour() < duskStartTime)
 		{
 			// Set to day
 			dayPhases = DayPhases.Day;
 			sun.intensity = daySunIntensity;
+			RenderSettings.ambientIntensity = dayAmbientIntensity;
 		}
 		else if(getHour() >= duskStartTime && getHour() < nightStartTime)
 		{
 			// Set to dusk
 			dayPhases = DayPhases.Dusk;
 			sun.intensity = duskSunIntensity;
+			RenderSettings.ambientIntensity = duskAmbientIntensity;
 		}
 		else if(getHour() >= nightStartTime)
 		{
 			// Set to night
 			dayPhases = DayPhases.Night;
 			sun.intensity = nightSunIntensity;
+			RenderSettings.ambientIntensity = nightAmbientIntensity;
 		}
 	}
 

@@ -28,11 +28,38 @@ public class TimeManager : MonoBehaviour {
 
 	private float sunInitialIntensity;
 
+	// Phase and Season Settings
+	#region
 	[Header("Phase Start Times")]
-	public int dawnStartTime;
-	public int dayStartTime;
-	public int duskStartTime;
-	public int nightStartTime;
+	public float dawnStartTime;
+	public float dayStartTime;
+	public float duskStartTime;
+	public float nightStartTime;
+
+	[Header("Spring Start Times")]
+	private float springDawnStartTime = 5.183f; // 5:11 AM Astronomical twilight on March 1
+	private float springDayStartTime = 6.833f; // 6:50 AM Sunrise on March 1 
+	private float springDuskStartTime = 17.933f; // 5:56 PM Sunset on March 1
+	private float springNightStartTime = 19.583f; // 7:35 PM Astronomical twilight on March 1
+
+	[Header("Summer Start Times")]
+	private float summerDawnStartTime = 2.966f; // 2:58 AM Astronomical twilight on June 1
+	private float summerDayStartTime = 5.416f; // 5:25 AM Sunrise on June 1
+	private float summerDuskStartTime = 20.85f; // 8:51 PM Sunset on June 1
+	private float summerNightStartTime = 23.316f; // 11:19 PM Astronomical twilight on June 1
+
+	[Header("Fall Start Times")]
+	private float fallDawnStartTime = 4.733f; // 4:44 AM Astronomical twilight on September 1
+	private float fallDayStartTime = 6.516f; // 6:31 AM Sunrise on September 1
+	private float fallDuskStartTime = 19.833f; // 7:50 PM Sunset on September 1
+	private float fallNightStartTime = 21.616f; // 9:37 PM Astronomical twilight on September 1
+
+	[Header("Winter Start Times")]
+	private float winterDawnStartTime = 5.733f; // 5:44 AM Astronomical twilight on December 1
+	private float winterDayStartTime = 7.5f; // 7:30 AM Sunrise on December 1
+	private float winterDuskStartTime = 16.483f; // 4:29 PM Sunset on December 1
+	private float winterNightStartTime = 18.25f; // 6:15 PM Astronomical twilight on December 1
+	#endregion
 
 	[Header("Sun Settings")]
 	public float sunDimTime; // Sun dim speed
@@ -48,6 +75,13 @@ public class TimeManager : MonoBehaviour {
 	public float duskAmbientIntensity = 0.25f;
 	public float nightAmbientIntensity = 0f;
 
+	[Header("Skybox Settings")]
+	private float skyboxBlendFactor;
+	public float skyboxBlendSpeed;
+	public float dawnSkyboxBlend = 0.5f;
+	public float daySkyboxBlend = 1f;
+	public float duskSkyboxBlend = 0.25f;
+	public float nightSkyboxBlend = 0f;
 	
 
 	IEnumerator TimeOfDay()
@@ -79,7 +113,7 @@ public class TimeManager : MonoBehaviour {
 
 		DawnSunSettings();
 		DawnAmbientSettings();
-		
+
 		// Change to Day phase
 		if (getHour() >= dayStartTime && getHour() < duskStartTime)
 		{
@@ -90,9 +124,7 @@ public class TimeManager : MonoBehaviour {
 	private void DawnSunSettings()
 	{
 		if (sun.intensity == dawnSunIntensity)
-		{
 			return;
-		}
 
 		if (sun.intensity < dawnSunIntensity) // If sun is not dawnSunIntensity, then go up to it
 		{
@@ -106,9 +138,7 @@ public class TimeManager : MonoBehaviour {
 	private void DawnAmbientSettings()
 	{
 		if (RenderSettings.ambientIntensity == dawnAmbientIntensity)
-		{
 			return;
-		}
 
 		if (RenderSettings.ambientIntensity < dawnAmbientIntensity) // If sun is not dawnSunIntensity, then go up to it
 		{
@@ -261,6 +291,68 @@ public class TimeManager : MonoBehaviour {
 		}
 	}
 
+	private void UpdateSkybox()
+	{
+		Debug.Log("Updated Skybox");
+
+
+		if(dayPhases == DayPhases.Dawn)
+		{
+			if (skyboxBlendFactor == dawnSkyboxBlend)
+				return;
+
+			if (skyboxBlendFactor < dawnSkyboxBlend)
+			{
+				skyboxBlendFactor += Time.deltaTime * (skyboxBlendSpeed * TIMESCALE);
+			}
+			else if (skyboxBlendFactor > dawnSkyboxBlend)
+			{
+				skyboxBlendFactor = dawnSkyboxBlend;
+			}
+		} else if (dayPhases == DayPhases.Day)
+		{
+			if (skyboxBlendFactor == daySkyboxBlend)
+				return;
+
+			if (skyboxBlendFactor < daySkyboxBlend)
+			{
+				skyboxBlendFactor += Time.deltaTime * (skyboxBlendSpeed * TIMESCALE);
+			}
+			else if (skyboxBlendFactor > daySkyboxBlend)
+			{
+				skyboxBlendFactor = daySkyboxBlend;
+			}
+		} else if (dayPhases == DayPhases.Dusk)
+		{
+			if (skyboxBlendFactor == duskSkyboxBlend)
+				return;
+
+			if (skyboxBlendFactor > duskSkyboxBlend)
+			{
+				skyboxBlendFactor -= Time.deltaTime * (skyboxBlendSpeed * TIMESCALE);
+			}
+			else if (skyboxBlendFactor < duskSkyboxBlend)
+			{
+				skyboxBlendFactor = duskSkyboxBlend;
+			}
+		} else if (dayPhases == DayPhases.Night)
+		{
+			if (skyboxBlendFactor == nightSkyboxBlend)
+				return;
+
+			if (skyboxBlendFactor > nightSkyboxBlend)
+			{
+				skyboxBlendFactor -= Time.deltaTime * (skyboxBlendSpeed * TIMESCALE);
+			}
+			else if (skyboxBlendFactor < nightSkyboxBlend)
+			{
+				skyboxBlendFactor = nightSkyboxBlend;
+			}
+		}
+
+		RenderSettings.skybox.SetFloat("_Blend", skyboxBlendFactor);
+	}
+
 	// DATE //
 	public Dictionary<int, string> monthDict = new Dictionary<int, string>
 	{
@@ -344,7 +436,7 @@ public class TimeManager : MonoBehaviour {
 	private void Update () {
 		CalculateDateTime();
 		UpdateSun();
-
+		UpdateSkybox();
 	}
 
 	private void CalculateDateTime()
@@ -476,21 +568,41 @@ public class TimeManager : MonoBehaviour {
 		if ((month >= 3 && day >= 1) && (month <= 5 && day <= 31))
 		{
 			season = 1;
+
+			dawnStartTime = springDawnStartTime;
+			dayStartTime = springDayStartTime;
+			duskStartTime = springDuskStartTime;
+			nightStartTime = springNightStartTime;
 		}
 		// Summer ~ June 1 to August 31
 		else if ((month >= 6 && day >= 1) && (month <= 8 && day <= 31))
 		{
 			season = 2;
+
+			dawnStartTime = summerDawnStartTime;
+			dayStartTime = summerDayStartTime;
+			duskStartTime = summerDuskStartTime;
+			nightStartTime = summerNightStartTime;
 		}
 		// Fall ~ September 1 to November 30
 		else if ((month >= 9 && day >= 1) && (month <= 11 && day <= 30))
 		{
 			season = 3;
+
+			dawnStartTime = fallDawnStartTime;
+			dayStartTime = fallDayStartTime;
+			duskStartTime = fallDuskStartTime;
+			nightStartTime = fallNightStartTime;
 		}
 		// Winter
 		else
 		{
 			season = 4;
+
+			dawnStartTime = winterDawnStartTime;
+			dayStartTime = winterDayStartTime;
+			duskStartTime = winterDuskStartTime;
+			nightStartTime = winterNightStartTime;
 		}
 	}
 

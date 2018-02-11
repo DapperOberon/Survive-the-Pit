@@ -24,7 +24,11 @@ public class TimeManager : MonoBehaviour {
 		Night
 	}
 
-	[SerializeField] private Light sun;
+	public Light sun;
+	public Transform sunPivot;
+	private Transform sunTransform;
+	private int centerofGameWorld = 0; // Center of the game world
+
 
 	private float sunInitialIntensity;
 
@@ -36,31 +40,52 @@ public class TimeManager : MonoBehaviour {
 	public float duskStartTime;
 	public float nightStartTime;
 
-	[Header("Spring Start Times")]
+	private float springDayLength;
+	private float summerDayLength;
+	private float fallDayLength;
+	private float winterDayLength;
+
+	private float dayTemp;
+	private float rotTemp;
+
 	private float springDawnStartTime = 5.183f; // 5:11 AM Astronomical twilight on March 1
 	private float springDayStartTime = 6.833f; // 6:50 AM Sunrise on March 1 
 	private float springDuskStartTime = 17.933f; // 5:56 PM Sunset on March 1
 	private float springNightStartTime = 19.583f; // 7:35 PM Astronomical twilight on March 1
 
-	[Header("Summer Start Times")]
 	private float summerDawnStartTime = 2.966f; // 2:58 AM Astronomical twilight on June 1
 	private float summerDayStartTime = 5.416f; // 5:25 AM Sunrise on June 1
 	private float summerDuskStartTime = 20.85f; // 8:51 PM Sunset on June 1
 	private float summerNightStartTime = 23.316f; // 11:19 PM Astronomical twilight on June 1
 
-	[Header("Fall Start Times")]
 	private float fallDawnStartTime = 4.733f; // 4:44 AM Astronomical twilight on September 1
 	private float fallDayStartTime = 6.516f; // 6:31 AM Sunrise on September 1
 	private float fallDuskStartTime = 19.833f; // 7:50 PM Sunset on September 1
 	private float fallNightStartTime = 21.616f; // 9:37 PM Astronomical twilight on September 1
 
-	[Header("Winter Start Times")]
 	private float winterDawnStartTime = 5.733f; // 5:44 AM Astronomical twilight on December 1
 	private float winterDayStartTime = 7.5f; // 7:30 AM Sunrise on December 1
 	private float winterDuskStartTime = 16.483f; // 4:29 PM Sunset on December 1
 	private float winterNightStartTime = 18.25f; // 6:15 PM Astronomical twilight on December 1
 	#endregion
 
+	// Temperature Settings
+	#region
+	private float temperature;
+	private float springTemperature = 61.6f; // Spring temp in F° in Salem
+	private float summerTemperature = 79.3f; // Summer temp in F° in Salem
+	private float fallTemperature = 64.6f; // Fall temp in F° in Salem
+	private float winterTemperature = 48.6f; // Winter temp in F° in Salem
+
+	[Header("Temp Variance")]
+	public float springTempVariance;
+	public float summerTempVariance;
+	public float fallTempVariance;
+	public float winterTempVariance;
+	#endregion
+
+	// Unity Lighting Settings
+	#region
 	[Header("Sun Settings")]
 	public float sunDimTime; // Sun dim speed
 	public float dawnSunIntensity = 0.5f;
@@ -82,7 +107,74 @@ public class TimeManager : MonoBehaviour {
 	public float daySkyboxBlend = 1f;
 	public float duskSkyboxBlend = 0.25f;
 	public float nightSkyboxBlend = 0f;
-	
+	#endregion
+
+
+	private void Awake()
+	{
+		if (instance == null)
+		{
+			instance = this;
+		}
+		else if (instance != this)
+		{
+			Destroy(gameObject);
+		}
+
+		//time = (int)getCurrentDateTime().TimeOfDay.TotalSeconds; // TODO Make rich loading time
+		day = getCurrentDateTime().Day;
+		month = getCurrentDateTime().Month;
+		year = getCurrentDateTime().Year;
+		CalculateSeason();
+
+		// 
+		//sunInitialIntensity = sun.intensity;
+		if (getHour() >= dawnStartTime && getHour() < dayStartTime)
+		{
+			// Set to dawn
+			dayPhases = DayPhases.Dawn;
+			sun.intensity = dawnSunIntensity;
+			RenderSettings.ambientIntensity = dawnAmbientIntensity;
+		}
+		else if (getHour() >= dayStartTime && getHour() < duskStartTime)
+		{
+			// Set to day
+			dayPhases = DayPhases.Day;
+			sun.intensity = daySunIntensity;
+			RenderSettings.ambientIntensity = dayAmbientIntensity;
+		}
+		else if (getHour() >= duskStartTime && getHour() < nightStartTime)
+		{
+			// Set to dusk
+			dayPhases = DayPhases.Dusk;
+			sun.intensity = duskSunIntensity;
+			RenderSettings.ambientIntensity = duskAmbientIntensity;
+		}
+		else if (getHour() >= nightStartTime)
+		{
+			// Set to night
+			dayPhases = DayPhases.Night;
+			sun.intensity = nightSunIntensity;
+			RenderSettings.ambientIntensity = nightAmbientIntensity;
+		}
+
+		sunTransform = sun.GetComponent<Transform>();
+		sunTransform.position = new Vector3(50, 0, centerofGameWorld);
+		sunTransform.localEulerAngles = new Vector3(0, -90, 0);
+		sunPivot.position = new Vector3(centerofGameWorld, 0, centerofGameWorld);
+	}
+	private void Start()
+	{
+		StartCoroutine(TimeOfDay());
+		// Set day phase based on time
+	}
+	private void Update()
+	{
+		CalculateDateTime();
+		UpdateSun();
+		RotateSun();
+		UpdateSkybox();
+	}
 
 	IEnumerator TimeOfDay()
 	{
@@ -118,6 +210,8 @@ public class TimeManager : MonoBehaviour {
 		if (getHour() >= dayStartTime && getHour() < duskStartTime)
 		{
 			dayPhases = DayPhases.Day;
+
+			
 		}
 	}
 
@@ -255,6 +349,10 @@ public class TimeManager : MonoBehaviour {
 		if (getHour() >= dawnStartTime && getHour() < dayStartTime)
 		{
 			dayPhases = DayPhases.Dawn;
+
+			// Resets sun position on Day
+			sunTransform.position = new Vector3(50, 0, centerofGameWorld);
+			sunTransform.localEulerAngles = new Vector3(0, -90, 0);
 		}
 	}
 
@@ -288,6 +386,38 @@ public class TimeManager : MonoBehaviour {
 		else if (RenderSettings.ambientIntensity > nightAmbientIntensity)
 		{
 			RenderSettings.ambientIntensity = nightAmbientIntensity;
+		}
+	}
+
+	private void RotateSun()
+	{
+		Debug.Log("RotateSun");
+
+		// Spring
+		if (season == 1)
+		{
+			dayTemp = springDayLength / 10;
+		}
+		// Summer
+		else if (season == 2)
+		{
+			dayTemp = summerDayLength / 10;
+		}
+		// Fall
+		else if (season == 3)
+		{
+			dayTemp = fallDayLength / 10;
+		}
+		// Winter
+		else if(season == 4)
+		{
+			dayTemp = winterDayLength / 10;
+		}
+
+		rotTemp = (dayTemp / 160);  // Rotation temp equals 180 - 20??
+		if(dayPhases == DayPhases.Day)
+		{
+			sunTransform.RotateAround(sunPivot.position, Vector3.forward, Time.deltaTime * (rotTemp * TIMESCALE));
 		}
 	}
 
@@ -377,67 +507,9 @@ public class TimeManager : MonoBehaviour {
 		{ 4, "Winter" }
 	};
 
+	private int dayCount = 1;
 	private int day, month, season, year;
 
-	private void Awake()
-	{
-		if(instance == null)
-		{
-			instance = this;
-		}
-		else if(instance != this)
-		{
-			Destroy(gameObject);
-		}
-
-		//time = (int)getCurrentDateTime().TimeOfDay.TotalSeconds; // TODO Make rich loading time
-		day = getCurrentDateTime().Day;
-		month = getCurrentDateTime().Month;
-		year = getCurrentDateTime().Year;
-		CalculateSeason();
-
-		// 
-		//sunInitialIntensity = sun.intensity;
-		if(getHour() >= dawnStartTime && getHour() < dayStartTime)
-		{
-			// Set to dawn
-			dayPhases = DayPhases.Dawn;
-			sun.intensity = dawnSunIntensity;
-			RenderSettings.ambientIntensity = dawnAmbientIntensity;
-		}
-		else if(getHour() >= dayStartTime && getHour() < duskStartTime)
-		{
-			// Set to day
-			dayPhases = DayPhases.Day;
-			sun.intensity = daySunIntensity;
-			RenderSettings.ambientIntensity = dayAmbientIntensity;
-		}
-		else if(getHour() >= duskStartTime && getHour() < nightStartTime)
-		{
-			// Set to dusk
-			dayPhases = DayPhases.Dusk;
-			sun.intensity = duskSunIntensity;
-			RenderSettings.ambientIntensity = duskAmbientIntensity;
-		}
-		else if(getHour() >= nightStartTime)
-		{
-			// Set to night
-			dayPhases = DayPhases.Night;
-			sun.intensity = nightSunIntensity;
-			RenderSettings.ambientIntensity = nightAmbientIntensity;
-		}
-	}
-
-	private void Start()
-	{
-		StartCoroutine(TimeOfDay());
-		// Set day phase based on time
-	}
-	private void Update () {
-		CalculateDateTime();
-		UpdateSun();
-		UpdateSkybox();
-	}
 
 	private void CalculateDateTime()
 	{
@@ -445,6 +517,7 @@ public class TimeManager : MonoBehaviour {
 
 		if(time >= dayLength)
 		{
+			dayCount++;
 			day++;
 			time = 0;
 		}
@@ -480,6 +553,11 @@ public class TimeManager : MonoBehaviour {
 
 	// Date methods
 	#region
+	private int getDayCount()
+	{
+		return dayCount;
+	}
+
 	private int getDay()
 	{
 		return day;
@@ -573,6 +651,8 @@ public class TimeManager : MonoBehaviour {
 			dayStartTime = springDayStartTime;
 			duskStartTime = springDuskStartTime;
 			nightStartTime = springNightStartTime;
+
+			springDayLength = duskStartTime - dayStartTime;
 		}
 		// Summer ~ June 1 to August 31
 		else if ((month >= 6 && day >= 1) && (month <= 8 && day <= 31))
@@ -583,6 +663,8 @@ public class TimeManager : MonoBehaviour {
 			dayStartTime = summerDayStartTime;
 			duskStartTime = summerDuskStartTime;
 			nightStartTime = summerNightStartTime;
+
+			summerDayLength = duskStartTime - dayStartTime;
 		}
 		// Fall ~ September 1 to November 30
 		else if ((month >= 9 && day >= 1) && (month <= 11 && day <= 30))
@@ -593,6 +675,8 @@ public class TimeManager : MonoBehaviour {
 			dayStartTime = fallDayStartTime;
 			duskStartTime = fallDuskStartTime;
 			nightStartTime = fallNightStartTime;
+
+			fallDayLength = duskStartTime - dayStartTime;
 		}
 		// Winter
 		else
@@ -603,6 +687,8 @@ public class TimeManager : MonoBehaviour {
 			dayStartTime = winterDayStartTime;
 			duskStartTime = winterDuskStartTime;
 			nightStartTime = winterNightStartTime;
+
+			winterDayLength = duskStartTime - dayStartTime;
 		}
 	}
 
@@ -619,19 +705,41 @@ public class TimeManager : MonoBehaviour {
 	}
 	#endregion
 
+	// Temperature methods
+	#region
+	public float getTemperature()
+	{
+		return temperature;
+	}
+
+	public string temperatureToString()
+	{
+		return string.Format("{0:F1}°F", getTemperature());
+	}
+	#endregion
+
 	public string toUniversalString()
 	{
-		return string.Format("{0:D2}:{1:D2}:{2:D2}\n{3} {4:D}, {5:D4}", getHour(), getMinute(), getSecond(), getMonth(), getDay(), getYear());
+		return string.Format("{0:D2}:{1:D2}:{2:D2}\n{3} {4:D}, {5:D4}\nDay: {6:D}", getHour(), getMinute(), getSecond(), getMonth(), getDay(), getYear(), getDayCount());
 	}
 
 	public string toString()
 	{
-		return string.Format("{0:D}:{1:D2}:{2:D2} {3}\n{4} {5:D}, {6:D4}", ((getHour() == 0 || getHour() == 12) ? 12 : getHour() % 12), getMinute(), getSecond(), (getHour() < 12 ? "AM" : "PM"), getMonth(), getDay(), getYear());
+		return string.Format("{0:D}:{1:D2}:{2:D2} {3}\n{4} {5:D}, {6:D4}\nDay: {7:D}", ((getHour() == 0 || getHour() == 12) ? 12 : getHour() % 12), getMinute(), getSecond(), (getHour() < 12 ? "AM" : "PM"), getMonth(), getDay(), getYear(), getDayCount());
 	}
 
 	private void UpdateSun()
 	{
-		sun.transform.localRotation = Quaternion.Euler((time / (dayLength / 360)) - 90, 0, 0);
+		//sun.transform.localRotation = Quaternion.Euler((time / (dayLength / 360)) - 90, 0, 0);
+
+
+
+
+
+
+
+
+
 
 		//float intensityMultiplier = 1;
 		//float time0To1 = Mathf.InverseLerp(0, dayLength, time);

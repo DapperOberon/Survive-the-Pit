@@ -12,7 +12,7 @@ public class GUIManager : MonoBehaviour {
 	public Slider healthSlider, hungerSlider, thirstSlider, staminaSlider;
 
 	// Time and Date
-	public TMP_Text TimeDateText;
+	public TMP_Text timeDateText, extTemp, temp;
 
 	// Screens
 	public GameObject deathScreen;
@@ -31,7 +31,8 @@ public class GUIManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		TimeDateText.text = TimeManager.instance.toString(); // TODO Possibly add static instance and call toString in an updateText function in TimeManager
+		timeDateText.text = TimeManager.instance.toString(); // TODO Possibly add static instance and call toString in an updateText function in TimeManager
+		extTemp.text = TimeManager.instance.temperatureToString();
 		healthSlider.value = Player.GetHealth() / 100;
 		hungerSlider.value = Player.GetHunger() / 100;
 		thirstSlider.value = Player.GetThirst() / 100;
